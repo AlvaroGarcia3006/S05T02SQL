@@ -1,17 +1,10 @@
-package s05.t02.sql.model;
+package s05.t02.sql.model.dto;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "player")
-public class Player {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class PlayerDTO {
     private int id;
-    @Column(unique = true)
     private String name;
-    @Column(name = "registration_date", columnDefinition = "TIMESTAMP")
     private LocalDateTime registrationDate;
 
     public int getId() {
