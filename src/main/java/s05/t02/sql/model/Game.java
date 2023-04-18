@@ -7,9 +7,10 @@ import javax.persistence.*;
 public class Game {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
     @ManyToOne
-    @JoinColumn(name = "id_player")
+    @JoinColumn(name = "player_id")
     private Player player;
     @Column(name = "dice_1")
     private int dice1;

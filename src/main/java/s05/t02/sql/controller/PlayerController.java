@@ -5,14 +5,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import s05.t02.sql.model.dto.GameDTO;
 import s05.t02.sql.model.dto.PlayerDTO;
+import s05.t02.sql.service.GameService;
 import s05.t02.sql.service.PlayerService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/players")
 public class PlayerController {
     @Autowired
     private PlayerService playerService;
+    @Autowired
+    private GameService gameService;
 
     @PostMapping
     public ResponseEntity<PlayerDTO> createPlayer(@RequestBody PlayerDTO playerDTO) {
@@ -22,7 +28,6 @@ public class PlayerController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
-
     @PutMapping("/{id}")
     public ResponseEntity<PlayerDTO> updatePlayerName(@PathVariable Integer id, @RequestBody PlayerDTO playerDTO) {
         playerDTO.setId(id);
@@ -30,6 +35,31 @@ public class PlayerController {
             return ResponseEntity.ok(playerService.updatePlayerName(id, playerDTO.getName()));
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+    @PostMapping("/{id}/games")
+    public ResponseEntity<GameDTO> createGame(@PathVariable("id") int playerId) {
+        try {
+            return ResponseEntity.ok(gameService.createGame(playerId));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+    @DeleteMapping("/{id}/games")
+    public ResponseEntity<GameDTO> deleteGames(@PathVariable("id") int playerId) {
+        try {
+            gameService.deleteGamesByPlayerId(playerId);
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+    @GetMapping("/{id}/games")
+    public ResponseEntity<List<GameDTO>> findGames(@PathVariable("id") int playerId) {
+        try {
+            return ResponseEntity.ok(gameService.findGamesByPlayerId(playerId));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 }

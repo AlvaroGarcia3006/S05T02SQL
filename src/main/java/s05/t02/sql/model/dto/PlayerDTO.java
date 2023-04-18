@@ -6,6 +6,7 @@ public class PlayerDTO {
     private int id;
     private String name;
     private LocalDateTime registrationDate;
+    private Float winRate;
 
     public int getId() {
         return id;
