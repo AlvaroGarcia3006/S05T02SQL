@@ -7,7 +7,6 @@ import java.util.List;
 public interface PlayerService {
     PlayerDTO createPlayer(PlayerDTO playerDTO);
     PlayerDTO updatePlayerName(Integer id, String name);
-    float calculateWinRate(int playerId);
     List<PlayerDTO> findAllPlayersWithWinRate();
     Double getAverageWinRate();
 }

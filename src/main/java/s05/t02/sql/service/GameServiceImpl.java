@@ -44,11 +44,6 @@ public class GameServiceImpl implements GameService{
         return gameDTOList;
     }
     @Override
-    public int rollDice() {
-        Random random = new Random();
-        return random.nextInt(6) + 1;
-    }
-    @Override
     public long countGamesByPlayerId(int playerId) {
         return gameRepository.countByPlayerId(playerId);
     }
@@ -61,6 +56,10 @@ public class GameServiceImpl implements GameService{
         BeanUtils.copyProperties(game, gameDTO);
         gameDTO.setPlayerId(game.getPlayer().getId());
         return gameDTO;
+    }
+    private int rollDice() {
+        Random random = new Random();
+        return random.nextInt(6) + 1;
     }
 
 }

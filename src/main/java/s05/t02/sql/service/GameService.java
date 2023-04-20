@@ -8,7 +8,6 @@ public interface GameService {
     GameDTO createGame(int playerId);
     void deleteGamesByPlayerId(int playerId);
     List<GameDTO> findGamesByPlayerId(int playerId);
-    int rollDice();
     long countGamesByPlayerId(int playerId);
     long countGamesWonByPlayerId(int playerId);
 }

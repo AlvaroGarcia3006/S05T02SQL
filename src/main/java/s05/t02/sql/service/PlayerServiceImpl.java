@@ -21,11 +21,6 @@ public class PlayerServiceImpl implements PlayerService{
     @Autowired
     private GameRepository gameRepository;
 
-    private PlayerDTO convertToDTO(Player player) {
-        PlayerDTO playerDTO = new PlayerDTO();
-        BeanUtils.copyProperties(player, playerDTO);
-        return playerDTO;
-    }
     @Override
     public PlayerDTO createPlayer(PlayerDTO playerDTO) {
         Player player = new Player();
@@ -49,16 +44,6 @@ public class PlayerServiceImpl implements PlayerService{
         return convertToDTO(updatedPlayer);
     }
     @Override
-    public float calculateWinRate(int playerId) {
-        long totalGames = gameService.countGamesByPlayerId(playerId);
-        long gamesWon = gameService.countGamesWonByPlayerId(playerId);
-
-        if (totalGames == 0) {
-            return 0;
-        }
-        return (float) gamesWon / totalGames * 100;
-    }
-    @Override
     public List<PlayerDTO> findAllPlayersWithWinRate() {
         List<Player> players = playerRepository.findAll();
         List<PlayerDTO> playerDTOs = new ArrayList<>();
@@ -71,7 +56,7 @@ public class PlayerServiceImpl implements PlayerService{
         }
         return playerDTOs;
     }
-    @Override
+
     public Double getAverageWinRate() {
         List<Player> players = playerRepository.findAll();
         double totalWinRate = 0.0;
@@ -97,5 +82,19 @@ public class PlayerServiceImpl implements PlayerService{
         } else {
             return (double) 0;
         }
+    }
+    private PlayerDTO convertToDTO(Player player) {
+        PlayerDTO playerDTO = new PlayerDTO();
+        BeanUtils.copyProperties(player, playerDTO);
+        return playerDTO;
+    }
+    private float calculateWinRate(int playerId) {
+        long totalGames = gameService.countGamesByPlayerId(playerId);
+        long gamesWon = gameService.countGamesWonByPlayerId(playerId);
+
+        if (totalGames == 0) {
+            return 0;
+        }
+        return (float) gamesWon / totalGames * 100;
     }
 }

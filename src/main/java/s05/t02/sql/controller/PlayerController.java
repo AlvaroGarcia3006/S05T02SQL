@@ -21,56 +21,39 @@ public class PlayerController {
     private GameService gameService;
 
     @PostMapping
+    @ResponseBody
     public ResponseEntity<PlayerDTO> createPlayer(@RequestBody PlayerDTO playerDTO) {
-        try {
             return ResponseEntity.ok(playerService.createPlayer(playerDTO));
-        } catch (IllegalArgumentException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-        }
     }
     @PutMapping("/{id}")
+    @ResponseBody
     public ResponseEntity<PlayerDTO> updatePlayerName(@PathVariable Integer id, @RequestBody PlayerDTO playerDTO) {
         playerDTO.setId(id);
-        try {
             return ResponseEntity.ok(playerService.updatePlayerName(id, playerDTO.getName()));
-        } catch (IllegalArgumentException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-        }
     }
     @PostMapping("/{id}/games")
+    @ResponseBody
     public ResponseEntity<GameDTO> createGame(@PathVariable("id") int playerId) {
-        try {
             return ResponseEntity.ok(gameService.createGame(playerId));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
     }
     @DeleteMapping("/{id}/games")
-    public ResponseEntity<GameDTO> deleteGames(@PathVariable("id") int playerId) {
-        try {
+    @ResponseBody
+    public ResponseEntity<Void> deleteGames(@PathVariable("id") int playerId) {
             gameService.deleteGamesByPlayerId(playerId);
             return ResponseEntity.ok().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
     }
     @GetMapping("/{id}/games")
+    @ResponseBody
     public ResponseEntity<List<GameDTO>> findGames(@PathVariable("id") int playerId) {
-        try {
             return ResponseEntity.ok(gameService.findGamesByPlayerId(playerId));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
     }
     @GetMapping
+    @ResponseBody
     public ResponseEntity<List<PlayerDTO>> findAllPlayersWithWinRate() {
-        try {
             return ResponseEntity.ok(playerService.findAllPlayersWithWinRate());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
     }
     @GetMapping("/ranking")
+    @ResponseBody
     public ResponseEntity<Double> getAverageWinRate() {
         return ResponseEntity.ok(playerService.getAverageWinRate());
     }
