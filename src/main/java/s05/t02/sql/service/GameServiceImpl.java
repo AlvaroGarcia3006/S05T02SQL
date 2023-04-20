@@ -48,6 +48,14 @@ public class GameServiceImpl implements GameService{
         Random random = new Random();
         return random.nextInt(6) + 1;
     }
+    @Override
+    public long countGamesByPlayerId(int playerId) {
+        return gameRepository.countByPlayerId(playerId);
+    }
+    @Override
+    public long countGamesWonByPlayerId(int playerId) {
+        return gameRepository.countByPlayerIdAndScore(playerId, 7);
+    }
     private GameDTO convertToDTO(Game game) {
         GameDTO gameDTO = new GameDTO();
         BeanUtils.copyProperties(game, gameDTO);

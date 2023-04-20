@@ -62,4 +62,16 @@ public class PlayerController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+    @GetMapping
+    public ResponseEntity<List<PlayerDTO>> findAllPlayersWithWinRate() {
+        try {
+            return ResponseEntity.ok(playerService.findAllPlayersWithWinRate());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    @GetMapping("/ranking")
+    public ResponseEntity<Double> getAverageWinRate() {
+        return ResponseEntity.ok(playerService.getAverageWinRate());
+    }
 }

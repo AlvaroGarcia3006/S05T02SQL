@@ -26,4 +26,10 @@ public class PlayerDTO {
     public void setRegistrationDate(LocalDateTime registrationDate) {
         this.registrationDate = registrationDate;
     }
+    public Float getWinRate() {
+        return winRate;
+    }
+    public void setWinRate(Float winRate) {
+        this.winRate = winRate;
+    }
 }

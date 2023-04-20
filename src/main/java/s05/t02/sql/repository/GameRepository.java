@@ -7,5 +7,7 @@ import java.util.List;
 public interface GameRepository extends JpaRepository<Game, String> {
     void deleteByPlayerId(int playerId);
     List<Game> findByPlayerId(int playerId);
+    long countByPlayerId(int playerId);
+    long countByPlayerIdAndScore(int playerId, int score);
 
 }

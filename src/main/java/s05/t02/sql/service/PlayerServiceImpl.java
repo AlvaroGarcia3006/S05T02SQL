@@ -3,15 +3,23 @@ package s05.t02.sql.service;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import s05.t02.sql.model.Game;
 import s05.t02.sql.model.Player;
 import s05.t02.sql.model.dto.PlayerDTO;
+import s05.t02.sql.repository.GameRepository;
 import s05.t02.sql.repository.PlayerRepository;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class PlayerServiceImpl implements PlayerService{
     @Autowired
     private PlayerRepository playerRepository;
+    @Autowired
+    private GameService gameService;
+    @Autowired
+    private GameRepository gameRepository;
 
     private PlayerDTO convertToDTO(Player player) {
         PlayerDTO playerDTO = new PlayerDTO();
@@ -39,5 +47,55 @@ public class PlayerServiceImpl implements PlayerService{
         player.setName(name);
         Player updatedPlayer = playerRepository.save(player);
         return convertToDTO(updatedPlayer);
+    }
+    @Override
+    public float calculateWinRate(int playerId) {
+        long totalGames = gameService.countGamesByPlayerId(playerId);
+        long gamesWon = gameService.countGamesWonByPlayerId(playerId);
+
+        if (totalGames == 0) {
+            return 0;
+        }
+        return (float) gamesWon / totalGames * 100;
+    }
+    @Override
+    public List<PlayerDTO> findAllPlayersWithWinRate() {
+        List<Player> players = playerRepository.findAll();
+        List<PlayerDTO> playerDTOs = new ArrayList<>();
+
+        for (Player player : players) {
+            PlayerDTO playerDTO = convertToDTO(player);
+            float winRate = calculateWinRate(player.getId());
+            playerDTO.setWinRate(winRate);
+            playerDTOs.add(playerDTO);
+        }
+        return playerDTOs;
+    }
+    @Override
+    public Double getAverageWinRate() {
+        List<Player> players = playerRepository.findAll();
+        double totalWinRate = 0.0;
+        int playerCount = 0;
+
+        for (Player player : players) {
+            List<Game> games = gameRepository.findByPlayerId(player.getId());
+            int wins = 0;
+            int totalGames = games.size();
+
+            for (Game game : games) {
+                if (game.getScore() == 7) {
+                    wins++;
+                }
+            }
+            if (totalGames > 0) {
+                totalWinRate += (double) wins / totalGames;
+                playerCount++;
+            }
+        }
+        if (playerCount > 0) {
+            return totalWinRate / playerCount;
+        } else {
+            return (double) 0;
+        }
     }
 }
