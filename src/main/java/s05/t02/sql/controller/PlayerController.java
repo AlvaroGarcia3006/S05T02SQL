@@ -57,4 +57,15 @@ public class PlayerController {
     public ResponseEntity<Double> getAverageWinRate() {
         return ResponseEntity.ok(playerService.getAverageWinRate());
     }
+    @GetMapping("/ranking/loser")
+    @ResponseBody
+    public ResponseEntity<PlayerDTO> getLoserPlayer() {
+        return ResponseEntity.ok(playerService.getLoserPlayer());
+    }
+
+    @GetMapping("/ranking/winner")
+    @ResponseBody
+    public ResponseEntity<PlayerDTO> getWinnerPlayer() {
+        return ResponseEntity.ok(playerService.getWinnerPlayer());
+    }
 }

@@ -9,4 +9,6 @@ public interface PlayerService {
     PlayerDTO updatePlayerName(Integer id, String name);
     List<PlayerDTO> findAllPlayersWithWinRate();
     Double getAverageWinRate();
+    PlayerDTO getLoserPlayer();
+    PlayerDTO getWinnerPlayer();
 }

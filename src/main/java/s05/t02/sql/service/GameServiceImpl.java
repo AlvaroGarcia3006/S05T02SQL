@@ -32,10 +32,12 @@ public class GameServiceImpl implements GameService{
         Game savedGame = gameRepository.save(game);
         return convertToDTO(savedGame);
     }
+
     @Override
     public void deleteGamesByPlayerId(int playerId) {
         gameRepository.deleteByPlayerId(playerId);
     }
+
     @Override
     public List<GameDTO> findGamesByPlayerId(int playerId) {
         List<Game> gameList = gameRepository.findByPlayerId(playerId);
@@ -43,20 +45,24 @@ public class GameServiceImpl implements GameService{
         gameList.forEach(game -> gameDTOList.add(this.convertToDTO(game)));
         return gameDTOList;
     }
+
     @Override
     public long countGamesByPlayerId(int playerId) {
         return gameRepository.countByPlayerId(playerId);
     }
+
     @Override
     public long countGamesWonByPlayerId(int playerId) {
         return gameRepository.countByPlayerIdAndScore(playerId, 7);
     }
+
     private GameDTO convertToDTO(Game game) {
         GameDTO gameDTO = new GameDTO();
         BeanUtils.copyProperties(game, gameDTO);
         gameDTO.setPlayerId(game.getPlayer().getId());
         return gameDTO;
     }
+
     private int rollDice() {
         Random random = new Random();
         return random.nextInt(6) + 1;

@@ -33,6 +33,7 @@ public class PlayerServiceImpl implements PlayerService{
         Player savedPlayer = playerRepository.save(player);
         return convertToDTO(savedPlayer);
     }
+
     @Override
     public PlayerDTO updatePlayerName(Integer id, String name) {
         if (playerRepository.existsByName(name)) {
@@ -43,6 +44,7 @@ public class PlayerServiceImpl implements PlayerService{
         Player updatedPlayer = playerRepository.save(player);
         return convertToDTO(updatedPlayer);
     }
+
     @Override
     public List<PlayerDTO> findAllPlayersWithWinRate() {
         List<Player> players = playerRepository.findAll();
@@ -56,7 +58,7 @@ public class PlayerServiceImpl implements PlayerService{
         }
         return playerDTOs;
     }
-
+    @Override
     public Double getAverageWinRate() {
         List<Player> players = playerRepository.findAll();
         double totalWinRate = 0.0;
@@ -83,6 +85,46 @@ public class PlayerServiceImpl implements PlayerService{
             return (double) 0;
         }
     }
+    @Override
+    public PlayerDTO getLoserPlayer() {
+        List<Player> players = playerRepository.findAll();
+        Player loser = null;
+        float lowestWinRate = Float.MAX_VALUE;
+
+        for (Player player : players) {
+            float winRate = calculateWinRate(player.getId());
+
+            if (winRate < lowestWinRate) {
+                lowestWinRate = winRate;
+                loser = player;
+            }
+        }
+        if (loser != null) {
+            return convertToDTO(loser);
+        } else {
+            return null;
+        }
+    }
+    @Override
+    public PlayerDTO getWinnerPlayer() {
+        List<Player> players = playerRepository.findAll();
+        Player winner = null;
+        float highestWinRate = Float.MIN_VALUE;
+
+        for (Player player : players) {
+            float winRate = calculateWinRate(player.getId());
+            if (winRate > highestWinRate) {
+                highestWinRate = winRate;
+                winner = player;
+            }
+        }
+        if (winner != null) {
+            return convertToDTO(winner);
+        } else {
+            return null;
+        }
+    }
+
     private PlayerDTO convertToDTO(Player player) {
         PlayerDTO playerDTO = new PlayerDTO();
         BeanUtils.copyProperties(player, playerDTO);
@@ -90,11 +132,12 @@ public class PlayerServiceImpl implements PlayerService{
     }
     private float calculateWinRate(int playerId) {
         long totalGames = gameService.countGamesByPlayerId(playerId);
-        long gamesWon = gameService.countGamesWonByPlayerId(playerId);
 
         if (totalGames == 0) {
             return 0;
         }
+        long gamesWon = gameService.countGamesWonByPlayerId(playerId);
+
         return (float) gamesWon / totalGames * 100;
     }
 }
