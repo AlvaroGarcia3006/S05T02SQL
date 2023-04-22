@@ -16,12 +16,14 @@ import java.util.Random;
 @Transactional
 @Service
 public class GameServiceImpl implements GameService{
+
+    private static final Integer WINNER_SCORE = 7;
     @Autowired
     private GameRepository gameRepository;
     @Autowired
     private PlayerRepository playerRepository;
     @Override
-    public GameDTO createGame(int playerId) {
+    public GameDTO createGame(Integer playerId) {
         Player player = playerRepository.findById(playerId)
                 .orElseThrow(() -> new RuntimeException("Player not found"));
         Game game = new Game();
@@ -34,12 +36,12 @@ public class GameServiceImpl implements GameService{
     }
 
     @Override
-    public void deleteGamesByPlayerId(int playerId) {
+    public void deleteGamesByPlayerId(Integer playerId) {
         gameRepository.deleteByPlayerId(playerId);
     }
 
     @Override
-    public List<GameDTO> findGamesByPlayerId(int playerId) {
+    public List<GameDTO> findGamesByPlayerId(Integer playerId) {
         List<Game> gameList = gameRepository.findByPlayerId(playerId);
         List<GameDTO> gameDTOList = new ArrayList<>();
         gameList.forEach(game -> gameDTOList.add(this.convertToDTO(game)));
@@ -47,13 +49,13 @@ public class GameServiceImpl implements GameService{
     }
 
     @Override
-    public long countGamesByPlayerId(int playerId) {
+    public Long countGamesByPlayerId(Integer playerId) {
         return gameRepository.countByPlayerId(playerId);
     }
 
     @Override
-    public long countGamesWonByPlayerId(int playerId) {
-        return gameRepository.countByPlayerIdAndScore(playerId, 7);
+    public Long countGamesWonByPlayerId(Integer playerId) {
+        return gameRepository.countByPlayerIdAndScore(playerId, WINNER_SCORE);
     }
 
     private GameDTO convertToDTO(Game game) {

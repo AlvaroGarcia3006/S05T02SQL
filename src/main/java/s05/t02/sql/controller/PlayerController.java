@@ -1,10 +1,8 @@
 package s05.t02.sql.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import s05.t02.sql.model.dto.GameDTO;
 import s05.t02.sql.model.dto.PlayerDTO;
 import s05.t02.sql.service.GameService;
@@ -25,38 +23,45 @@ public class PlayerController {
     public ResponseEntity<PlayerDTO> createPlayer(@RequestBody PlayerDTO playerDTO) {
             return ResponseEntity.ok(playerService.createPlayer(playerDTO));
     }
+
     @PutMapping("/{id}")
     @ResponseBody
     public ResponseEntity<PlayerDTO> updatePlayerName(@PathVariable Integer id, @RequestBody PlayerDTO playerDTO) {
         playerDTO.setId(id);
             return ResponseEntity.ok(playerService.updatePlayerName(id, playerDTO.getName()));
     }
+
     @PostMapping("/{id}/games")
     @ResponseBody
-    public ResponseEntity<GameDTO> createGame(@PathVariable("id") int playerId) {
+    public ResponseEntity<GameDTO> createGame(@PathVariable("id") Integer playerId) {
             return ResponseEntity.ok(gameService.createGame(playerId));
     }
+
     @DeleteMapping("/{id}/games")
     @ResponseBody
-    public ResponseEntity<Void> deleteGames(@PathVariable("id") int playerId) {
+    public ResponseEntity<Void> deleteGames(@PathVariable("id") Integer playerId) {
             gameService.deleteGamesByPlayerId(playerId);
             return ResponseEntity.ok().build();
     }
+
     @GetMapping("/{id}/games")
     @ResponseBody
-    public ResponseEntity<List<GameDTO>> findGames(@PathVariable("id") int playerId) {
+    public ResponseEntity<List<GameDTO>> findGames(@PathVariable("id") Integer playerId) {
             return ResponseEntity.ok(gameService.findGamesByPlayerId(playerId));
     }
+
     @GetMapping
     @ResponseBody
     public ResponseEntity<List<PlayerDTO>> findAllPlayersWithWinRate() {
             return ResponseEntity.ok(playerService.findAllPlayersWithWinRate());
     }
+
     @GetMapping("/ranking")
     @ResponseBody
     public ResponseEntity<Double> getAverageWinRate() {
         return ResponseEntity.ok(playerService.getAverageWinRate());
     }
+
     @GetMapping("/ranking/loser")
     @ResponseBody
     public ResponseEntity<PlayerDTO> getLoserPlayer() {

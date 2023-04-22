@@ -8,21 +8,21 @@ public class Game {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Integer id;
     @ManyToOne
     @JoinColumn(name = "player_id")
     private Player player;
     @Column(name = "dice_1")
-    private int dice1;
+    private Integer dice1;
     @Column(name = "dice_2")
-    private int dice2;
+    private Integer dice2;
     @Column(name = "score")
-    private int score;
+    private Integer score;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
     public Player getPlayer() {
@@ -31,22 +31,22 @@ public class Game {
     public void setPlayer(Player player) {
         this.player = player;
     }
-    public int getDice1() {
+    public Integer getDice1() {
         return dice1;
     }
-    public void setDice1(int dice1) {
+    public void setDice1(Integer dice1) {
         this.dice1 = dice1;
     }
-    public int getDice2() {
+    public Integer getDice2() {
         return dice2;
     }
-    public void setDice2(int dice2) {
+    public void setDice2(Integer dice2) {
         this.dice2 = dice2;
     }
-    public int getScore() {
+    public Integer getScore() {
         return score;
     }
-    public void setScore(int score) {
+    public void setScore(Integer score) {
         this.score = score;
     }
 }

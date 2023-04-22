@@ -10,6 +10,7 @@ import s05.t02.sql.repository.GameRepository;
 import s05.t02.sql.repository.PlayerRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -39,7 +40,7 @@ public class PlayerServiceImpl implements PlayerService{
         if (playerRepository.existsByName(name)) {
             throw new IllegalArgumentException("Player name already exists");
         }
-        Player player = playerRepository.findById(id).orElseThrow(() -> new RuntimeException("Player not found"));
+        Player player = playerRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Player not found"));
         player.setName(name);
         Player updatedPlayer = playerRepository.save(player);
         return convertToDTO(updatedPlayer);
@@ -50,12 +51,12 @@ public class PlayerServiceImpl implements PlayerService{
         List<Player> players = playerRepository.findAll();
         List<PlayerDTO> playerDTOs = new ArrayList<>();
 
-        for (Player player : players) {
+        players.forEach(player -> {
             PlayerDTO playerDTO = convertToDTO(player);
             float winRate = calculateWinRate(player.getId());
             playerDTO.setWinRate(winRate);
             playerDTOs.add(playerDTO);
-        }
+        });
         return playerDTOs;
     }
     @Override
@@ -87,42 +88,20 @@ public class PlayerServiceImpl implements PlayerService{
     }
     @Override
     public PlayerDTO getLoserPlayer() {
-        List<Player> players = playerRepository.findAll();
-        Player loser = null;
-        float lowestWinRate = Float.MAX_VALUE;
+        List<PlayerDTO> playerDTOS = this.findAllPlayersWithWinRate();
 
-        for (Player player : players) {
-            float winRate = calculateWinRate(player.getId());
-
-            if (winRate < lowestWinRate) {
-                lowestWinRate = winRate;
-                loser = player;
-            }
-        }
-        if (loser != null) {
-            return convertToDTO(loser);
-        } else {
-            return null;
-        }
+        return playerDTOS.stream()
+                .min(Comparator.comparing(PlayerDTO::getWinRate))
+                .orElse(null);
     }
+
     @Override
     public PlayerDTO getWinnerPlayer() {
-        List<Player> players = playerRepository.findAll();
-        Player winner = null;
-        float highestWinRate = Float.MIN_VALUE;
+        List<PlayerDTO> playerDTOS = this.findAllPlayersWithWinRate();
 
-        for (Player player : players) {
-            float winRate = calculateWinRate(player.getId());
-            if (winRate > highestWinRate) {
-                highestWinRate = winRate;
-                winner = player;
-            }
-        }
-        if (winner != null) {
-            return convertToDTO(winner);
-        } else {
-            return null;
-        }
+        return playerDTOS.stream()
+                .max(Comparator.comparing(PlayerDTO::getWinRate))
+                .orElse(null);
     }
 
     private PlayerDTO convertToDTO(Player player) {

@@ -1,6 +1,5 @@
 package s05.t02.sql.service;
 
-import s05.t02.sql.model.Player;
 import s05.t02.sql.model.dto.PlayerDTO;
 import java.util.List;
 

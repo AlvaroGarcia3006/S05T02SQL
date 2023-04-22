@@ -5,9 +5,9 @@ import s05.t02.sql.model.Game;
 import java.util.List;
 
 public interface GameRepository extends JpaRepository<Game, String> {
-    void deleteByPlayerId(int playerId);
-    List<Game> findByPlayerId(int playerId);
-    long countByPlayerId(int playerId);
-    long countByPlayerIdAndScore(int playerId, int score);
+    void deleteByPlayerId(Integer playerId);
+    List<Game> findByPlayerId(Integer playerId);
+    Long countByPlayerId(Integer playerId);
+    Long countByPlayerIdAndScore(Integer playerId, Integer score);
 
 }

@@ -5,9 +5,9 @@ import java.util.List;
 
 public interface GameService {
 
-    GameDTO createGame(int playerId);
-    void deleteGamesByPlayerId(int playerId);
-    List<GameDTO> findGamesByPlayerId(int playerId);
-    long countGamesByPlayerId(int playerId);
-    long countGamesWonByPlayerId(int playerId);
+    GameDTO createGame(Integer playerId);
+    void deleteGamesByPlayerId(Integer playerId);
+    List<GameDTO> findGamesByPlayerId(Integer playerId);
+    Long countGamesByPlayerId(Integer playerId);
+    Long countGamesWonByPlayerId(Integer playerId);
 }

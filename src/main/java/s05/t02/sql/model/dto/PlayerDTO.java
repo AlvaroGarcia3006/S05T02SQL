@@ -3,15 +3,15 @@ package s05.t02.sql.model.dto;
 import java.time.LocalDateTime;
 
 public class PlayerDTO {
-    private int id;
+    private Integer id;
     private String name;
     private LocalDateTime registrationDate;
     private Float winRate;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
     public String getName() {
