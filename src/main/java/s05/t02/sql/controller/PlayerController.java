@@ -3,6 +3,7 @@ package s05.t02.sql.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import s05.t02.sql.model.User;
 import s05.t02.sql.model.dto.GameDTO;
 import s05.t02.sql.model.dto.PlayerDTO;
 import s05.t02.sql.service.GameService;
@@ -73,4 +74,12 @@ public class PlayerController {
     public ResponseEntity<PlayerDTO> getWinnerPlayer() {
         return ResponseEntity.ok(playerService.getWinnerPlayer());
     }
+
+    @PostMapping("/login")
+    public User login(@RequestParam("user") String userName, @RequestParam("password") String pass){
+        User loginUser = new User(userName);
+        loginUser.setToken(loginUser.getJWTToken(userName));
+        return loginUser;
+    }
+
 }
